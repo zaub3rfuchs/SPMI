@@ -1,7 +1,11 @@
 import os
 import threading
+import time
 
 
+##################################################################################################################
+###                                               CLASSES                                                      ### 
+##################################################################################################################
 
 class Report():
     def __init__(self, ttl):
@@ -33,6 +37,11 @@ class TXTRecord(Report):
     def __init__(self, ttl, txt):
         self.ttl = ttl
         self.txt = txt
+
+
+##################################################################################################################
+###                                               DEFINITIONS                                                  ### 
+##################################################################################################################
 
 recordDict = {}
 
@@ -77,12 +86,32 @@ def createRecord(type, record):
     recordDict[" " + type] = list
     return recordDict[" " + type]
     
-
-    
 def work(url, type):
     record = digRecord(url, type)
     return createRecord(type, record)
 
+
+##################################################################################################################
+###                                               SERIAL                                                       ### 
+##################################################################################################################
+
+startSerial = time.perf_counter()
+
+recordTypesSerial = ["MX", "A", "AAAA", "NS", "TXT"]
+urlSerial = "w-hs.de"
+
+for recordType in recordTypesSerial:
+    work(urlSerial, recordType)
+finishSerial = time.perf_counter()
+
+print(f'Finishes in {round(finishSerial-startSerial, 2)} second(s) [Serial]')
+
+
+##################################################################################################################
+###                                               THREADS                                                      ### 
+##################################################################################################################
+
+start = time.perf_counter()
 
 threads = []
 recordTypes = ["MX", "A", "AAAA", "NS", "TXT"]
@@ -96,18 +125,13 @@ for recordType in recordTypes:
 for thread in threads:
     thread.join()
 
+finish = time.perf_counter()
+print(f'Finishes in {round(finish-start, 2)} second(s) [Multithreaded]')
 
-def parseMX(record):
-    ttl, hostname = record.split(" ")
-    mxRecord = MXRecord(ttl, hostname)
-    return mxRecord
+
+##################################################################################################################
+###                                               TESTING                                                      ### 
+##################################################################################################################
 
 print("------------------------------------------------------------------------------------------------------------")
-##print(digRecord("w-hs.de"))
-##print(digRecord("w-hs.de").split()[0])
-print(digRecord("youtube.com", "any"))
-print(work("youtube.com", "A"))
-##print("w-hs.de   ttl     IN     www.seds.de".split(" ")[3])
-##print(createRecord("A", ))
-##record = get_DigAny("w-hs.de")
-##print(parseMX(record))
+print(digRecord("w-hs.de", "any"))

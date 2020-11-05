@@ -1,7 +1,7 @@
-import dnspython as dns
-import dns.resolver
+##import dnspython as dns
+##import dns.resolver
 import socket
-import whois
+##import whois
 import os
 import requests
 
@@ -19,13 +19,13 @@ print("IP: Addresse von " + exampleDomain)
 print(addr1)
 
 
-result = dns.resolver.query('www.w-hs.de', 'A')
+##result = dns.resolver.query('www.w-hs.de', 'A')
 for ipval in result:
     print('IP', ipval.to_text())
 print("------------------------------------------")
 
 
-result = dns.resolver.query('mail.google.com', 'CNAME')
+##result = dns.resolver.query('mail.google.com', 'CNAME')
 for cnameval in result:
     print('cname target address:', cnameval.target)
 print("------------------------------------------")
